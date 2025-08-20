@@ -312,3 +312,32 @@ def get_num_parameters(model):
             total_params += n_params
 
     print("\nTotal parameters:", total_params)
+
+
+
+def plot_predictiones(model, X_test, y_test, i, pred_probs, pred_label):
+
+    names = [ "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot" ]
+    
+    confidence = np.max(pred_probs) * 100    
+    image = X_test[i]
+    true_label = y_test[i]
+
+    plt.figure(figsize=(8,4))
+    plt.subplot(1,2,1)
+    plt.imshow(image.squeeze(), cmap="gray")
+    plt.title(f"Verdad: {names[int(true_label)]}\nPredicciones: {names[int(pred_label)]}\nConf: {confidence:.2f}%")
+    plt.axis("off")
+    
+    
+    plt.subplot(1,2,2)
+    plt.bar(range(len(pred_probs[0])), pred_probs[0])
+    plt.xticks(range(len(pred_probs[0])), class_names, rotation=45)
+    plt.title("Probabilidades predichas")
+    plt.ylabel("Probabilidad")
+    plt.xlabel("Clase")
+
+    plt.tight_layout()
+    plt.show()
+
+    
