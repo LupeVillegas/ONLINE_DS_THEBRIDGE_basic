@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from tensorflow import keras
 
 
 def pinta_distribucion_categoricas(df, columnas_categoricas, relativa=False, mostrar_valores=False):
@@ -273,4 +274,41 @@ def bubble_plot(df, col_x, col_y, col_size, scale = 1000):
     plt.title(f'Burbujas de {col_x} vs {col_y} con Tamaño basado en {col_size}')
     plt.show()
 
+def show_subset(images, labels, indices, rows=2, cols=5):
+    """
+    Display a subset of images with labels from Fashion-MNIST.
+    
+    Parameters:
+        images (ndarray): The image data (e.g., train_images).
+        labels (ndarray): The label data (e.g., train_labels).
+        indices (list): List of indices of the instances to display.
+        rows (int): Number of rows in the subplot.
+        cols (int): Number of columns in the subplot.
+    """
+    class_names = [ "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
+    "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot" ]
+    
+    plt.figure(figsize=(cols * 2, rows * 2))
 
+    for i, idx in enumerate(indices[:rows * cols]):
+        plt.subplot(rows, cols, i + 1)
+        plt.imshow(images[idx], cmap="Greys")
+        plt.title(class_names[labels[idx]])
+        plt.axis("off")
+    
+    plt.tight_layout()
+    plt.show()
+
+
+def get_num_parameters(model):
+    
+    total_params = 0
+    for layer in model.layers:
+        weights = layer.get_weights()
+        if weights:  # only layers with weights
+            w, b = weights
+            n_params = w.size + b.size
+            print(f"{layer.name}: weights={w.shape}, biases={b.shape}, params={n_params}")
+            total_params += n_params
+
+    print("\nTotal parameters:", total_params)
